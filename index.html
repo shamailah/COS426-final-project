@@ -7,70 +7,12 @@
     </style>
   </head>
   <body>
-    <!-- <script src="libjs/three.min.js"></script> -->
     <script src="js/three.min.js/three.min.js"></script>
     <script src="libjs/stats.min.js"></script>
     <script src="libjs/dat.gui.js"></script>
     <script src="libjs/OBJLoader.js"></script>
     <script src="libjs/TrackballControls.js"></script>
     <script src="libjs/OrbitControls.js"></script>
-    <script>
-      var scene = new THREE.Scene();
-      var aspect = window.innerWidth / window.innerHeight;
-      var camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000 );
-
-      // Create lights
-      var light = new THREE.PointLight(0xEEEEEE);
-      light.position.set(20, 0, 20);
-      scene.add(light);
-
-      var lightAmb = new THREE.AmbientLight(0x777777);
-      scene.add(lightAmb);
-
-      var renderer = new THREE.WebGLRenderer({antialias: true});
-      renderer.setSize( window.innerWidth, window.innerHeight );
-      document.body.appendChild( renderer.domElement );
-
-      var geometry = new THREE.SphereGeometry(2, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
-      var material = new THREE.MeshNormalMaterial();
-      material.flatShading = true;
-      var sphere = new THREE.Mesh( geometry, material );
-      scene.add( sphere );
-      camera.position.z = 5;
-
-      // background scene, that does not change with rotation (stretch to change later)
-
-  		// Load the background texture
-      var loader = new THREE.TextureLoader();
-      var texture = loader.load( 'textures/starry_bg.jpg' );
-      texture.minFilter = THREE.LinearFilter;
-      // debugger;
-      var backgroundMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(2, 2, 0),
-          new THREE.MeshBasicMaterial({
-              map: texture
-          }));
-
-      backgroundMesh.material.depthTest = false;
-      backgroundMesh.material.depthWrite = false;
-
-      // Create your background scene
-      var backgroundScene = new THREE.Scene();
-      var backgroundCamera = new THREE.Camera();
-      backgroundScene.add(backgroundCamera );
-      backgroundScene.add(backgroundMesh );
-
-    var render = function () {
-      requestAnimationFrame( render );
-      sphere.rotation.y += 0.01;
-
-      renderer.autoClear = false;
-      renderer.clear();
-      renderer.render(backgroundScene, backgroundCamera);
-      renderer.render( scene, camera );
-    };
-
-    render();
-    </script>
+    <script src="js/renderer.js"></script>
   </body>
 </html>
