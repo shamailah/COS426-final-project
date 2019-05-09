@@ -14,7 +14,6 @@ var camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000 );
 var light = new THREE.PointLight(0xEEEEEE);
 var lightAmb = new THREE.AmbientLight(0x777777);
 var renderer = new THREE.WebGLRenderer({antialias: true});
-var texture = new THREE.TextureLoader().load("textures/stars_milky_way.jpg");
 var controls = new THREE.OrbitControls(camera);
 
 // create all the planets
@@ -33,10 +32,10 @@ controls.enablePan = true;
 controls.enableZoom = true;
 controls.enableRotate = true;
 controls.enableKeys = true;
-// controls.minDistance
-// controls.maxDistance
-// controls.minPolarAngle
-// controls.maxPolarAngle
+controls.minDistance
+controls.maxDistance
+controls.minPolarAngle
+controls.maxPolarAngle
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -55,11 +54,32 @@ scene.add(saturn);
 scene.add(uranus);
 scene.add(neptune);
 
+// Load the background texture
+var texture = new THREE.TextureLoader().load('textures/stars_milky_way.jpg');
+texture.minFilter = THREE.LinearFilter;
+var backgroundMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2, 0),
+    new THREE.MeshBasicMaterial({
+        map: texture
+    }));
+
+backgroundMesh.material.depthTest = false;
+backgroundMesh.material.depthWrite = false;
+
+// Create your background scene
+var backgroundScene = new THREE.Scene();
+var backgroundCamera = new THREE.Camera();
+backgroundScene.add(backgroundCamera );
+backgroundScene.add(backgroundMesh );                                                
+
 var render = function() {
   requestAnimationFrame(render);
   earth.rotation.y += 0.01;
   //jupiter.rotation.z += 0.015;
   controls.update();
+  renderer.autoClear = false;
+  renderer.clear();
+  renderer.render(backgroundScene, backgroundCamera);
   renderer.render(scene, camera);
 };
 
