@@ -1,5 +1,16 @@
 let uniforms;
 
+function loadObject(objfile, mtlfile) {
+  var mtlloader = new THREE.MTLLoader();
+  mtlloader.load(mtlfile, function(materials) {
+    var objloader = new THREE.OBJLoader();
+    objloader.setMaterials(materials);
+    objloader.load(objfile, function(object) {
+      scene.add(object);
+    });
+  });
+}
+
 function createPlanet(texture, radius, d, specTexture, normalTexture) {
   var planetGeometry = new THREE.SphereGeometry(radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
   if (!(d === undefined)) planetGeometry.translate(d.x, d.y, d.z);
@@ -112,6 +123,7 @@ var jupiter = createPlanet("textures/jupiter.jpg", 2, new THREE.Vector3(5, 0, 0)
 var saturn = createPlanet("textures/saturn.jpg", 2, new THREE.Vector3(10, 0, 0));
 var uranus = createPlanet("textures/uranusmap.jpg", 2, new THREE.Vector3(15, 0, 0));
 var neptune = createPlanet("textures/neptune.jpg", 2, new THREE.Vector3(20, 0, 0));
+
 // Controls
 controls.enablePan = true;
 controls.enableZoom = true;
@@ -140,6 +152,9 @@ scene.add(moon);
 // scene.add(saturn);
 // scene.add(uranus);
 // scene.add(neptune);
+
+loadObject("obj/astronaut.obj", "mtl/astronaut.mtl");
+// loadObject("obj/rocket.obj", "mtl/rocket.mtl");
 
 this.sceneDatGui = new dat.GUI(); // controls the meshes in the scene
 this.controlListDatGui = new dat.GUI(); // controls each of the meshes
