@@ -12,6 +12,16 @@ for (var i = 0; i < planetNames.length; i++) {
   this.sceneObject.bodies[planetNames[i]].mesh = window[planetNames[i]];
 }
 
+var cloudsBody = new Body('clouds');
+cloudsBody.mesh = window['clouds'];
+this.sceneObject.bodies['clouds'] = cloudsBody;
+
+var moonObject = new PlanetInfo();
+moonObject.mesh = window['moon'];
+this.sceneObject.bodies['moon'] = moonObject;
+this.sceneObject['moon'] = true;
+moonObject.controller = this.sceneDatGui.add(this.sceneObject, 'moon');
+
 // handling the controller events
 this.sceneObject.bodies.mercury.controller.onChange(function(value) {
   if (value) scene.add(this.object.bodies.mercury.mesh);
@@ -42,9 +52,19 @@ this.sceneObject.bodies.neptune.controller.onChange(function(value) {
   else scene.remove(this.object.bodies.neptune.mesh);
 });
 this.sceneObject.bodies.earth.controller.onChange(function(value) {
-  if (value) scene.add(this.object.bodies.earth.mesh);
-  else scene.remove(this.object.bodies.earth.mesh);
+  if (value) {
+    scene.add(this.object.bodies.earth.mesh);
+    scene.add(this.object.bodies.clouds.mesh);
+  }
+  else {
+    scene.remove(this.object.bodies.earth.mesh);
+    scene.remove(this.object.bodies.clouds.mesh);
+  }
 });
+this.sceneObject.bodies.moon.controller.onChange(function(value) {
+  if (value) scene.add(this.object.bodies.moon.mesh);
+  else scene.remove(this.object.bodies.moon.mesh);
+})
 
 function SceneObject(scene) {
   this.scene = scene;
@@ -58,5 +78,10 @@ function PlanetInfo() {
   this.location = new THREE.Vector3(0, 4, -5);
   this.inScene = false;
   this.controller = undefined;
+  this.mesh = undefined;
+}
+
+function Body(name) {
+  this.name = name;
   this.mesh = undefined;
 }
