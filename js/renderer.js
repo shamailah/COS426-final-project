@@ -52,10 +52,10 @@ scene.add(venus);
 scene.add(earth);
 scene.add(mars);
 scene.add(mercury);
-//scene.add(jupiter);
+scene.add(jupiter);
 //scene.add(saturn);
 //scene.add(uranus);
-//scene.add(neptune);
+scene.add(neptune);
 
 
 
@@ -86,8 +86,8 @@ let planetData = [];
 
 var mercuryData = {
   mass: 3.370 * Math.pow(10, 21),
-  position: new THREE.Vector3(30, 0, 0),
-  distance: 60,
+  position: new THREE.Vector3(30, 25, 0),
+  distance: 64,
   velocity: new THREE.Vector3(19900.0, 0.0, 9900900.0),
   planet: mercury
 }
@@ -95,8 +95,8 @@ var mercuryData = {
 
 var venusData = {
   mass: 5.970 * Math.pow(10, 24),
-  position: new THREE.Vector3(venusDist, 0, 0),
-  distance: 100,
+  position: new THREE.Vector3(70, -20, 0),
+  distance: 110,
   velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
   planet: venus
 }
@@ -117,16 +117,38 @@ var marsData = {
   planet: mars
 }
 
+var jupiterData = {
+  mass: 4.4190 * Math.pow(10, 26),
+  position: new THREE.Vector3(400, 0, 0),
+  distance: 250,
+  velocity: new THREE.Vector3(900000.0, 0.0, 10000000.0),
+  planet: jupiter
+}
+
+var neptuneData = {
+  mass: 1.08 * Math.pow(10, 27),
+  position: new THREE.Vector3(500, 0, 0),
+  distance: 350,
+  velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
+  planet: neptune
+}
+
 system.push("venus")
 system.push("earth")
 system.push("mars")
 system.push("mercury")
+system.push("jupiter")
+system.push("neptune")
 
 mercury.position.x = 45;
-//mercury.position.y = 45;
-venus.position.x = 90;
+mercury.position.y = 25;
+venus.position.x = 100;
+venus.position.y = -35;
 earth.position.x = 120;
 mars.position.x = 195;
+jupiter.position.x = 365;
+neptune.position.x = 470;
+//jupiter.position.y = 0;
 
 
   for (let i = 0; i < system.length; i++)
@@ -143,6 +165,12 @@ mars.position.x = 195;
     }
     if (system[i] === "mars"){
       planetData.push(marsData)
+    }
+    if (system[i] === "jupiter"){
+      planetData.push(jupiterData)
+    }
+    if (system[i] === "neptune"){
+      planetData.push(neptuneData)
     }
 
   }
@@ -173,6 +201,8 @@ var render = function() {
 
 
   }
+
+  //console.log(mars.position)
   //var axis = new THREE.Vector3(5, 5, 5);
   //let earthPos = new THREE.Vector3(earth.vertex.x, earth.vertex.y, earth.vertex.z);
   //let sunPos = new THREE.Vector3(sun.vertex.x, sun.vertex.y, sun.vertex.z);
