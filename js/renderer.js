@@ -155,6 +155,7 @@ scene.add(moon);
 
 loadObject("obj/astronaut.obj", "mtl/astronaut.mtl");
 // loadObject("obj/rocket.obj", "mtl/rocket.mtl");
+// loadObject("obj/asteroid.obj", "mtl/asteroid.mtl");
 
 this.sceneDatGui = new dat.GUI(); // controls the meshes in the scene
 this.controlListDatGui = new dat.GUI(); // controls each of the meshes
