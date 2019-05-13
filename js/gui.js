@@ -24,14 +24,15 @@ moonObject.controller = this.sceneDatGui.add(this.sceneObject, 'moon');
 
 
 // controlling the pause functionality
-
+var pauseController = this.sceneDatGui.add(this.sceneObject, 'pause');
+pauseController.onChange(function(value) { console.log(pause); pause = sceneObject.pause; });
 
 // handling the controller events for the planet visibility
 
 
 this.sceneObject.bodies.mercury.controller.onChange(function(value) {
   if (value) scene.add(this.object.bodies.mercury.mesh);
-  else scene.remove(this.object.bodies.mercury.mesh)
+  else scene.remove(this.object.bodies.mercury.mesh);
 });
 this.sceneObject.bodies.venus.controller.onChange(function(value) {
   if (value) scene.add(this.object.bodies.venus.mesh);
