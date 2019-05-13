@@ -123,7 +123,6 @@ var jupiter = createPlanet("textures/jupiter.jpg", 2, new THREE.Vector3(5, 0, 0)
 var saturn = createPlanet("textures/saturn.jpg", 2, new THREE.Vector3(10, 0, 0));
 var uranus = createPlanet("textures/uranusmap.jpg", 2, new THREE.Vector3(15, 0, 0));
 var neptune = createPlanet("textures/neptune.jpg", 2, new THREE.Vector3(20, 0, 0));
-
 // Controls
 controls.enablePan = true;
 controls.enableZoom = true;
@@ -265,10 +264,12 @@ var dTheta = 2 * Math.PI / 1000;
 
 var render = function() {
   requestAnimationFrame(render);
-
+  
   theta += dTheta;
   moon.position.x = r * Math.cos(theta);
   moon.position.z = r * Math.sin(theta);
+  earth.rotation.y += 0.0005;
+  clouds.rotation.y -= 0.00025;
 
   for (let i = 0; i < planetData.length; i++)
   {
@@ -298,6 +299,7 @@ var render = function() {
 
   // jupiter.rotation.z += 0.015;
   sun.rotation.y += 0.01;
+
   controls.update();
   renderer.autoClear = false;
   renderer.clear();

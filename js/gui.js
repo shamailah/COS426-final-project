@@ -22,10 +22,13 @@ this.sceneObject.bodies['moon'] = moonObject;
 this.sceneObject['moon'] = true;
 moonObject.controller = this.sceneDatGui.add(this.sceneObject, 'moon');
 
+
 // controlling the pause functionality
 
 
 // handling the controller events for the planet visibility
+
+
 this.sceneObject.bodies.mercury.controller.onChange(function(value) {
   if (value) scene.add(this.object.bodies.mercury.mesh);
   else scene.remove(this.object.bodies.mercury.mesh)
@@ -68,8 +71,6 @@ this.sceneObject.bodies.moon.controller.onChange(function(value) {
   if (value) scene.add(this.object.bodies.moon.mesh);
   else scene.remove(this.object.bodies.moon.mesh);
 })
-
-
 
 function SceneObject(scene) {
   this.scene = scene;
