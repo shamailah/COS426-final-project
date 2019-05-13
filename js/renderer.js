@@ -143,9 +143,10 @@ camera.position.z = 20;
 scene.add(light);
 scene.add(lightAmb);
 scene.add(sun);
-scene.add(mercury);
 scene.add(venus);
 scene.add(earth);
+scene.add(clouds);
+scene.add(moon);
 scene.add(mars);
 scene.add(mercury);
 scene.add(jupiter);
@@ -285,6 +286,7 @@ for (let i = 0; i < system.length; i++)
   }
 }
 
+
 loadObject("obj/astronaut.obj", "mtl/astronaut.mtl");
 // loadObject("obj/rocket.obj", "mtl/rocket.mtl");
 
@@ -357,7 +359,7 @@ var render = function() {
     let xVel = planetData[i].velocity.x + accelX * increment;
     let yVel = planetData[i].velocity.y + accelY * increment;
     let zVel = planetData[i].velocity.z + accelZ * increment;
-
+    
     planetData[i].planet.position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
     planetData[i].position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
     planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
