@@ -103,6 +103,7 @@ function createSun(texture, radius, position) {
   return light;
 }
 
+
 var scene = new THREE.Scene();
 var aspect = window.innerWidth / window.innerHeight;
 var camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000 );
@@ -123,6 +124,7 @@ var jupiter = createPlanet("textures/jupiter.jpg", 2, new THREE.Vector3(5, 0, 0)
 var saturn = createPlanet("textures/saturn.jpg", 2, new THREE.Vector3(10, 0, 0));
 var uranus = createPlanet("textures/uranusmap.jpg", 2, new THREE.Vector3(15, 0, 0));
 var neptune = createPlanet("textures/neptune.jpg", 2, new THREE.Vector3(20, 0, 0));
+
 // Controls
 controls.enablePan = true;
 controls.enableZoom = true;
@@ -137,20 +139,153 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 light.position.set(20, 0, 20);
 camera.position.z = 20;
-scene.background = texture;
-// scene.add(light);
+
+scene.add(light);
 scene.add(lightAmb);
 scene.add(sun);
-scene.add(mercury);
 scene.add(venus);
 scene.add(earth);
 scene.add(clouds);
 scene.add(moon);
 scene.add(mars);
-// scene.add(jupiter);
-// scene.add(saturn);
-// scene.add(uranus);
-// scene.add(neptune);
+scene.add(mercury);
+scene.add(jupiter);
+scene.add(saturn);
+scene.add(uranus);
+scene.add(neptune);
+
+const sunMass = 1.989 * Math.pow(10, 30);
+const G = 6.67 * Math.pow(10, -11);
+const venusDist = 70;
+let increment = 0.0000001;
+
+let earthStartingVelocity = new THREE.Vector3(100000.0, 0.0, 9999990.0);
+let earthMass = 5.970 * Math.pow(10, 24);
+
+var velocity = new THREE.Vector3(100000.0, 0.0, 9999990.0);
+
+
+let sunPos = new THREE.Vector3(0, 0, 0);
+
+let system = [];
+
+let planetData = [];
+
+var mercuryData = {
+  mass: 3.370 * Math.pow(10, 21),
+  position: new THREE.Vector3(30, 25, 0),
+  distance: 64,
+  velocity: new THREE.Vector3(19900.0, 0.0, 9900900.0),
+  planet: mercury
+}
+
+var venusData = {
+  mass: 5.970 * Math.pow(10, 24),
+  position: new THREE.Vector3(70, -20, 0),
+  distance: 110,
+  velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
+  planet: venus
+}
+
+var earthData = {
+  mass: 6.4190 * Math.pow(10, 23),
+  position: new THREE.Vector3(130, 0, 0),
+  distance: 130,
+  velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
+  planet: earth
+}
+
+var marsData = {
+  mass: 4.4190 * Math.pow(10, 22),
+  position: new THREE.Vector3(190, 45, 0),
+  distance: 205,
+  velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
+  planet: mars
+}
+
+var jupiterData = {
+  mass: 4.4190 * Math.pow(10, 26),
+  position: new THREE.Vector3(300, 0, 0),
+  distance: 220,
+  velocity: new THREE.Vector3(990000.0, 0.0, 9900000.0),
+  planet: jupiter
+}
+
+var saturnData = {
+  mass: 4.4190 * Math.pow(10, 26),
+  position: new THREE.Vector3(400, 0, 0),
+  distance: 250,
+  velocity: new THREE.Vector3(900000.0, 0.0, 10000000.0),
+  planet: saturn
+}
+
+var uranusData = {
+  mass: 1.08 * Math.pow(10, 27),
+  position: new THREE.Vector3(450, 0, 0),
+  distance: 300,
+  velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
+  planet: uranus
+}
+
+var neptuneData = {
+  mass: 1.08 * Math.pow(10, 27),
+  position: new THREE.Vector3(500, 70, 0),
+  distance: 400,
+  velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
+  planet: neptune
+}
+
+system.push("mercury")
+system.push("venus")
+system.push("earth")
+system.push("mars")
+system.push("jupiter")
+system.push("saturn")
+system.push("uranus")
+system.push("neptune")
+
+mercury.position.x = 45;
+mercury.position.y = 25;
+venus.position.x = 100;
+venus.position.y = -35;
+earth.position.x = 120;
+mars.position.x = 195;
+mars.position.y = 40;
+jupiter.position.x = 295;
+saturn.position.x = 375;
+uranus.position.x = 430;
+neptune.position.x = 470;
+neptune.position.y = 50;
+
+for (let i = 0; i < system.length; i++)
+{
+  if (system[i] === "mercury"){
+    planetData.push(mercuryData)
+  }
+  if (system[i] === "venus"){
+    planetData.push(venusData)
+
+  }
+  if (system[i] === "earth"){
+    planetData.push(earthData)
+  }
+  if (system[i] === "mars"){
+    planetData.push(marsData)
+  }
+  if (system[i] === "jupiter"){
+    planetData.push(jupiterData)
+  }
+  if (system[i] === "saturn"){
+    planetData.push(saturnData)
+  }
+  if (system[i] === "uranus"){
+    planetData.push(uranusData)
+  }
+  if (system[i] === "neptune"){
+    planetData.push(neptuneData)
+  }
+}
+
 
 loadObject("obj/astronaut.obj", "mtl/astronaut.mtl");
 // loadObject("obj/rocket.obj", "mtl/rocket.mtl");
@@ -171,134 +306,65 @@ backgroundMesh.material.depthWrite = false;
 var backgroundScene = new THREE.Scene();
 var backgroundCamera = new THREE.Camera();
 backgroundScene.add(backgroundCamera);
-backgroundScene.add(backgroundMesh);                                                
-  
-const sunMass = 1.989 * Math.pow(10, 30);
-//const earthMass = 5.970 * Math.pow(10, 24);
-const G = 6.67 * Math.pow(10, -11);
-const venusDist = 70;
-let increment = 0.0000001;
-// var startingAccel = new THREEVector3(0.0, 0.0, 0.2);
-
-let earthStartingVelocity = new THREE.Vector3(100000.0, 0.0, 9999990.0);
-let earthMass = 5.970 * Math.pow(10, 24);
-//let earthStartingPos = new THREE.Vector3(earthDist, 0, 0);
-var velocity = new THREE.Vector3(100000.0, 0.0, 9999990.0);
-
-//var earthPos = new THREE.Vector3(earthDist, 0, 0);
-let sunPos = new THREE.Vector3(0, 0, 0);
-
-//earth.position.z = 0;
-//console.log(earth.position.x);
-
-let system = [];
-
-let planetData = [];
-
-var mercuryData = {
-  mass: 3.370 * Math.pow(10, 21),
-  position: new THREE.Vector3(30, 0, 0),
-  distance: 60,
-  velocity: new THREE.Vector3(19900.0, 0.0, 9900900.0),
-  planet: mercury
-}
-
-
-var venusData = {
-  mass: 5.970 * Math.pow(10, 24),
-  position: new THREE.Vector3(venusDist, 0, 0),
-  distance: 100,
-  velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
-  planet: venus
-}
-
-var earthData = {
-  mass: 6.4190 * Math.pow(10, 23),
-  position: new THREE.Vector3(130, 0, 0),
-  distance: 130,
-  velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
-  planet: earth
-}
-
-var marsData = {
-  mass: 4.4190 * Math.pow(10, 22),
-  position: new THREE.Vector3(190, 0, 0),
-  distance: 190,
-  velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
-  planet: mars
-}
-
-system.push("venus")
-system.push("earth")
-system.push("mars")
-system.push("mercury")
-
-mercury.position.x = 45;
-//mercury.position.y = 45;
-venus.position.x = 90;
-earth.position.x = 120;
-mars.position.x = 195;
-
-
-for (let i = 0; i < system.length; i++)
-{
-  if (system[i] === "mercury"){
-    planetData.push(mercuryData)
-  }
-  if (system[i] === "venus"){
-    planetData.push(venusData)
-
-  }
-  if (system[i] === "earth"){
-    planetData.push(earthData)
-  }
-  if (system[i] === "mars"){
-    planetData.push(marsData)
-  }
-}
-
-//Set the moon's orbital radius, start angle, and angle increment value
-var r = 5;
-var theta = 0;
-var dTheta = 2 * Math.PI / 1000;
+backgroundScene.add(backgroundMesh);
 
 var render = function() {
   requestAnimationFrame(render);
-  
-  theta += dTheta;
-  moon.position.x = r * Math.cos(theta);
-  moon.position.z = r * Math.sin(theta);
-  earth.rotation.y += 0.0005;
-  clouds.rotation.y -= 0.00025;
+
+  let forcesX = [];
+  let forcesY = [];
+  let forcesZ = [];
 
   for (let i = 0; i < planetData.length; i++)
   {
-    let forceCalc = (G * sunMass * planetData[i].mass) / (planetData[i].distance * planetData[i].distance * 10000)
-    let forceX = forceCalc * (sunPos.x - planetData[i].position.x) / planetData[i].distance;
-    let forceZ = forceCalc * (sunPos.z - planetData[i].position.z) / planetData[i].distance;
-    let forceY = forceCalc * (sunPos.y - planetData[i].position.y) / planetData[i].distance;
-    let accelX = forceX / planetData[i].mass;
-    let accelY = forceY / planetData[i].mass;
-    let accelZ = forceZ / planetData[i].mass;
+    let forcesXTemp = 0;
+    let forcesYTemp = 0;
+    let forcesZTemp = 0;
+
+    for (let j = 0; j < planetData.length; j++)
+    {
+      if (i == j)
+      {
+        continue;
+      }
+      let diffVec = (new THREE.Vector3()).subVectors(planetData[i].position, planetData[j].position);
+      forceCalc = (G * planetData[j].mass * planetData[i].mass) / (diffVec.length() * diffVec.length() * 10000)
+      let forceX = forceCalc * (planetData[j].position.x - planetData[i].position.x) / diffVec.length();
+      let forceZ = forceCalc * (planetData[j].position.z - planetData[i].position.z) / diffVec.length();
+      let forceY = forceCalc * (planetData[j].position.y - planetData[i].position.y) / diffVec.length();
+      forcesXTemp += forceX;
+      forcesYTemp += forceY;
+      forcesZTemp += forceZ;
+    }
+    let forceCalcSun = (G * sunMass * planetData[i].mass) / (planetData[i].distance * planetData[i].distance * 10000)
+    let forceXSun = forceCalcSun * (sunPos.x - planetData[i].position.x) / planetData[i].distance;
+    let forceZSun = forceCalcSun * (sunPos.z - planetData[i].position.z) / planetData[i].distance;
+    let forceYSun = forceCalcSun * (sunPos.y - planetData[i].position.y) / planetData[i].distance;
+    
+    forcesXTemp += forceXSun;
+    forcesYTemp += forceYSun;
+    forcesZTemp += forceZSun;
+
+    forcesX.push(forcesXTemp);
+    forcesY.push(forcesYTemp);
+    forcesZ.push(forcesZTemp);
+  }
+
+  for (let i = 0; i < planetData.length; i++)
+  {
+
+    let accelX = forcesX[i] / planetData[i].mass;
+    let accelY = forcesY[i] / planetData[i].mass;
+    let accelZ = forcesZ[i] / planetData[i].mass;
     let xVel = planetData[i].velocity.x + accelX * increment;
     let yVel = planetData[i].velocity.y + accelY * increment;
     let zVel = planetData[i].velocity.z + accelZ * increment;
-
-    var newPosition = new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment);
-    planetData[i].planet.position.add(newPosition);
-    if (planetData[i].planet === earth) {
-      clouds.position.add(earth.position);
-      moon.position.add(earth.position);
-    }
-    planetData[i].position.add(newPosition);
-    //console.log(planetData[i].planet.position);
+    
+    planetData[i].planet.position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
+    planetData[i].position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
     planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
 
-
   }
-
-  // jupiter.rotation.z += 0.015;
-  sun.rotation.y += 0.01;
 
   controls.update();
   renderer.autoClear = false;
