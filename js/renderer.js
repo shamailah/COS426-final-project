@@ -111,8 +111,8 @@ var earthData = {
 
 var marsData = {
   mass: 4.4190 * Math.pow(10, 22),
-  position: new THREE.Vector3(190, 0, 0),
-  distance: 190,
+  position: new THREE.Vector3(190, 45, 0),
+  distance: 205,
   velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
   planet: mars
 }
@@ -143,8 +143,8 @@ var uranusData = {
 
 var neptuneData = {
   mass: 1.08 * Math.pow(10, 27),
-  position: new THREE.Vector3(500, 0, 0),
-  distance: 350,
+  position: new THREE.Vector3(500, 70, 0),
+  distance: 400,
   velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
   planet: neptune
 }
@@ -164,10 +164,12 @@ venus.position.x = 100;
 venus.position.y = -35;
 earth.position.x = 120;
 mars.position.x = 195;
+mars.position.y = 40;
 jupiter.position.x = 295;
 saturn.position.x = 375;
 uranus.position.x = 430;
 neptune.position.x = 470;
+neptune.position.y = 50;
 //jupiter.position.y = 0;
 
 
