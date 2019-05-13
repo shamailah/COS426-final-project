@@ -190,9 +190,6 @@ var velocity = new THREE.Vector3(100000.0, 0.0, 9999990.0);
 let sunPos = new THREE.Vector3(0, 0, 0);
 
 //earth.position.z = 0;
-
-
-
 //console.log(earth.position.x);
 
 let system = [];
@@ -244,23 +241,22 @@ earth.position.x = 120;
 mars.position.x = 195;
 
 
-  for (let i = 0; i < system.length; i++)
-  {
-    if (system[i] === "mercury"){
-      planetData.push(mercuryData)
-    }
-    if (system[i] === "venus"){
-      planetData.push(venusData)
-
-    }
-    if (system[i] === "earth"){
-      planetData.push(earthData)
-    }
-    if (system[i] === "mars"){
-      planetData.push(marsData)
-    }
+for (let i = 0; i < system.length; i++)
+{
+  if (system[i] === "mercury"){
+    planetData.push(mercuryData)
+  }
+  if (system[i] === "venus"){
+    planetData.push(venusData)
 
   }
+  if (system[i] === "earth"){
+    planetData.push(earthData)
+  }
+  if (system[i] === "mars"){
+    planetData.push(marsData)
+  }
+}
 
 //Set the moon's orbital radius, start angle, and angle increment value
 var r = 5;
@@ -287,64 +283,18 @@ var render = function() {
     let yVel = planetData[i].velocity.y + accelY * increment;
     let zVel = planetData[i].velocity.z + accelZ * increment;
 
-    planetData[i].planet.position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
-    planetData[i].position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
+    var newPosition = new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment);
+    planetData[i].planet.position.add(newPosition);
+    if (planetData[i].planet === earth) {
+      clouds.position.add(earth.position);
+      moon.position.add(earth.position);
+    }
+    planetData[i].position.add(newPosition);
     //console.log(planetData[i].planet.position);
     planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
 
 
   }
-  //var axis = new THREE.Vector3(5, 5, 5);
-  //let earthPos = new THREE.Vector3(earth.vertex.x, earth.vertex.y, earth.vertex.z);
-  //let sunPos = new THREE.Vector3(sun.vertex.x, sun.vertex.y, sun.vertex.z);
-  //console.log(sunPos);
- 
-
-  //console.log("xVel: " + xVel * increment);
-  //console.log("zVel: " + zVel * increment);
-
-  // earth.translateOnAxis(new THREE.Vector3(1, 0, 0), xVel * increment);
-
-  //let totalAccel = accelX + accelZ;
-  //let totalV = Math.sqrt(zVel * zVel + xVel * xVel)
-  //earth.translateOnAxis(new THREE.Vector3(accelX / totalAccel, 0, accelZ / totalAccel), totalV);
-
-  //earth.translateOnAxis(new THREE.Vector3(1, 0, 0), xVel * increment);
-  //earth.translateOnAxis(new THREE.Vector3(0, 0, 1), zVel * increment);
-  //earth.translateOnAxis(new THREE.Vector3(1, 0, 0), xVel * increment);
-  //earth.translateOnAxis(new THREE.Vector3(0, 1, 0));
-  //earth.translateOnAxis(new THREE.Vector3(1, 0, 0), xVel * increment);
-
-  //earth.geometry.x = earth.geometry.x + xVel * increment;
-  //earth.geometry.z = earth.geometry.z + zVel * increment;
-  //earth.geometry.translate(new THREE.Vector3(0.01, 0.011, 0.01));
-
-  /* let forceCalc = (G * sunMass * earthMass) / (earthDist * earthDist * 10000);
-  let forceX = forceCalc * (sunPos.x - earthPos.x) / earthDist;
-  let forceZ = forceCalc * (sunPos.z - earthPos.z) / earthDist;
-
-  let accelX = forceX / earthMass;
-  let accelZ = forceZ / earthMass;
-  let xVel = velocity.x + accelX * increment;
-  let zVel = velocity.z + accelZ * increment;
-
- 
-  earth.position.add(new THREE.Vector3(xVel * increment, 0, zVel * increment));
-  //console.log(earth.position.z)
-  earthPos.add(new THREE.Vector3(xVel * increment, 0, zVel * increment));
-  //console.log(earthPos);
-
-  velocity = new THREE.Vector3(xVel, 0, zVel);*/
-
-
-
-  //earth.position.x += 0.01;
-
-
-  //earth.rotation.y += 0.01;
-  //earth.rotation.z += 0.01;
-  //earth.rotateOnAxis(axis, 0.4);
-  // earth.position.x += 0.01;
 
   // jupiter.rotation.z += 0.015;
   sun.rotation.y += 0.01;
