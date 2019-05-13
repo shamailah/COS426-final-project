@@ -125,7 +125,6 @@ var jupiter = createPlanet("textures/jupiter.jpg", 2, new THREE.Vector3(5, 0, 0)
 var saturn = createPlanet("textures/saturn.jpg", 2, new THREE.Vector3(10, 0, 0));
 var uranus = createPlanet("textures/uranusmap.jpg", 2, new THREE.Vector3(15, 0, 0));
 var neptune = createPlanet("textures/neptune.jpg", 2, new THREE.Vector3(20, 0, 0));
-
 // Controls
 controls.enablePan = true;
 controls.enableZoom = true;
@@ -298,13 +297,8 @@ var render = function() {
       planetData[i].position.add(newPosition);
       //console.log(planetData[i].planet.position);
       planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
-
-
-    }
   }
 
-  // jupiter.rotation.z += 0.015;
-  // sun.rotation.y += 0.01;
   controls.update();
   renderer.autoClear = false;
   renderer.clear();
