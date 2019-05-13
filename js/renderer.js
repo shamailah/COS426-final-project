@@ -54,7 +54,7 @@ scene.add(mars);
 scene.add(mercury);
 scene.add(jupiter);
 scene.add(saturn);
-//scene.add(uranus);
+scene.add(uranus);
 scene.add(neptune);
 
 
@@ -133,6 +133,14 @@ var saturnData = {
   planet: saturn
 }
 
+var uranusData = {
+  mass: 1.08 * Math.pow(10, 27),
+  position: new THREE.Vector3(450, 0, 0),
+  distance: 300,
+  velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
+  planet: uranus
+}
+
 var neptuneData = {
   mass: 1.08 * Math.pow(10, 27),
   position: new THREE.Vector3(500, 0, 0),
@@ -147,6 +155,7 @@ system.push("earth")
 system.push("mars")
 system.push("jupiter")
 system.push("saturn")
+system.push("uranus")
 system.push("neptune")
 
 mercury.position.x = 45;
@@ -157,6 +166,7 @@ earth.position.x = 120;
 mars.position.x = 195;
 jupiter.position.x = 295;
 saturn.position.x = 375;
+uranus.position.x = 430;
 neptune.position.x = 470;
 //jupiter.position.y = 0;
 
@@ -181,6 +191,9 @@ neptune.position.x = 470;
     }
     if (system[i] === "saturn"){
       planetData.push(saturnData)
+    }
+    if (system[i] === "uranus"){
+      planetData.push(uranusData)
     }
     if (system[i] === "neptune"){
       planetData.push(neptuneData)
@@ -229,7 +242,7 @@ var render = function() {
     forcesX.push(forcesXTemp);
     forcesY.push(forcesYTemp);
     forcesZ.push(forcesZTemp);
-    console.log("yeet")
+    //console.log("yeet")
   }
 
   for (let i = 0; i < planetData.length; i++)
