@@ -310,16 +310,18 @@ var backgroundCamera = new THREE.Camera();
 backgroundScene.add(backgroundCamera);
 backgroundScene.add(backgroundMesh);
 
+//Set the moon's orbital radius, start angle, and angle increment value
+var r = 5;
+var theta = 0;
+var dTheta = 2 * Math.PI / 300;
+earth.geometry.center();
+clouds.geometry.center();
+
 var render = function() {
   requestAnimationFrame(render);
-
+  earth.rotation.y += 0.005;
+  clouds.rotation.y -= 0.0025;
   if (!pause) {
-    // theta += dTheta;
-    // moon.position.x = r * Math.cos(theta);
-    // moon.position.z = r * Math.sin(theta);
-    // earth.rotation.y += 0.0005;
-    // clouds.rotation.y -= 0.00025;
-
     let forcesX = [];
     let forcesY = [];
     let forcesZ = [];
@@ -368,9 +370,18 @@ var render = function() {
       let xVel = planetData[i].velocity.x + accelX * increment;
       let yVel = planetData[i].velocity.y + accelY * increment;
       let zVel = planetData[i].velocity.z + accelZ * increment;
-      
-      planetData[i].planet.position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
-      planetData[i].position.add(new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment));
+
+
+      let newPosition = new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment);
+      planetData[i].planet.position.add(newPosition);
+      planetData[i].position.add(newPosition);
+      if (planetData[i].planet === earth) {
+        clouds.position.copy(earth.position);
+        theta += dTheta;
+        moon.position.y = earth.position.y;
+        moon.position.x = earth.position.x + r * Math.cos(theta);
+        moon.position.z = earth.position.z + r * Math.sin(theta);
+      }
       planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
     }
   }
