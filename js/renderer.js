@@ -1,5 +1,7 @@
 let uniforms;
 
+var pause = false;
+
 function loadObject(objfile, mtlfile) {
   var mtlloader = new THREE.MTLLoader();
   mtlloader.load(mtlfile, function(materials) {
@@ -266,38 +268,43 @@ var dTheta = 2 * Math.PI / 1000;
 var render = function() {
   requestAnimationFrame(render);
 
-  theta += dTheta;
-  moon.position.x = r * Math.cos(theta);
-  moon.position.z = r * Math.sin(theta);
+  if (!pause) {
+    theta += dTheta;
+    moon.position.x = r * Math.cos(theta);
+    moon.position.z = r * Math.sin(theta);
+    earth.rotation.y += 0.0005;
+    clouds.rotation.y -= 0.00025;
 
-  for (let i = 0; i < planetData.length; i++)
-  {
-    let forceCalc = (G * sunMass * planetData[i].mass) / (planetData[i].distance * planetData[i].distance * 10000)
-    let forceX = forceCalc * (sunPos.x - planetData[i].position.x) / planetData[i].distance;
-    let forceZ = forceCalc * (sunPos.z - planetData[i].position.z) / planetData[i].distance;
-    let forceY = forceCalc * (sunPos.y - planetData[i].position.y) / planetData[i].distance;
-    let accelX = forceX / planetData[i].mass;
-    let accelY = forceY / planetData[i].mass;
-    let accelZ = forceZ / planetData[i].mass;
-    let xVel = planetData[i].velocity.x + accelX * increment;
-    let yVel = planetData[i].velocity.y + accelY * increment;
-    let zVel = planetData[i].velocity.z + accelZ * increment;
+  
+    for (let i = 0; i < planetData.length; i++)
+    {
+      let forceCalc = (G * sunMass * planetData[i].mass) / (planetData[i].distance * planetData[i].distance * 10000)
+      let forceX = forceCalc * (sunPos.x - planetData[i].position.x) / planetData[i].distance;
+      let forceZ = forceCalc * (sunPos.z - planetData[i].position.z) / planetData[i].distance;
+      let forceY = forceCalc * (sunPos.y - planetData[i].position.y) / planetData[i].distance;
+      let accelX = forceX / planetData[i].mass;
+      let accelY = forceY / planetData[i].mass;
+      let accelZ = forceZ / planetData[i].mass;
+      let xVel = planetData[i].velocity.x + accelX * increment;
+      let yVel = planetData[i].velocity.y + accelY * increment;
+      let zVel = planetData[i].velocity.z + accelZ * increment;
 
-    var newPosition = new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment);
-    planetData[i].planet.position.add(newPosition);
-    if (planetData[i].planet === earth) {
-      clouds.position.add(earth.position);
-      moon.position.add(earth.position);
+      var newPosition = new THREE.Vector3(xVel * increment, yVel * increment, zVel * increment);
+      planetData[i].planet.position.add(newPosition);
+      if (planetData[i].planet === earth) {
+        clouds.position.add(earth.position);
+        moon.position.add(earth.position);
+      }
+      planetData[i].position.add(newPosition);
+      //console.log(planetData[i].planet.position);
+      planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
+
+
     }
-    planetData[i].position.add(newPosition);
-    //console.log(planetData[i].planet.position);
-    planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
-
-
   }
 
   // jupiter.rotation.z += 0.015;
-  sun.rotation.y += 0.01;
+  // sun.rotation.y += 0.01;
   controls.update();
   renderer.autoClear = false;
   renderer.clear();
