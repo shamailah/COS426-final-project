@@ -159,7 +159,6 @@ scene.add(neptune);
 const sunMass = 1.989 * Math.pow(10, 30);
 const G = 6.67 * Math.pow(10, -11);
 const venusDist = 70;
-let increment = 0.0000001;
 
 let earthStartingVelocity = new THREE.Vector3(100000.0, 0.0, 9999990.0);
 let earthMass = 5.970 * Math.pow(10, 24);
@@ -173,12 +172,15 @@ let system = [];
 
 let planetData = [];
 
+let speedScale = 2;
+
 var mercuryData = {
   mass: 3.370 * Math.pow(10, 21),
   position: new THREE.Vector3(30, 25, 0),
   distance: 64,
   velocity: new THREE.Vector3(19900.0, 0.0, 9900900.0),
-  planet: mercury
+  planet: mercury,
+  increment: 0.0000001
 }
 
 var venusData = {
@@ -186,7 +188,8 @@ var venusData = {
   position: new THREE.Vector3(70, -20, 0),
   distance: 110,
   velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
-  planet: venus
+  planet: venus,
+  increment: 0.0000001 * 0.933
 }
 
 var earthData = {
@@ -194,7 +197,8 @@ var earthData = {
   position: new THREE.Vector3(130, 0, 0),
   distance: 130,
   velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
-  planet: earth
+  planet: earth,
+  increment: 0.0000001 * 0.717
 }
 
 var marsData = {
@@ -202,7 +206,8 @@ var marsData = {
   position: new THREE.Vector3(190, 45, 0),
   distance: 205,
   velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
-  planet: mars
+  planet: mars,
+  increment: 0.0000001 * 0.7532
 }
 
 var jupiterData = {
@@ -210,7 +215,9 @@ var jupiterData = {
   position: new THREE.Vector3(300, 0, 0),
   distance: 220,
   velocity: new THREE.Vector3(990000.0, 0.0, 9900000.0),
-  planet: jupiter
+  planet: jupiter,
+  increment: 0.0000001 * 0.1355
+
 }
 
 var saturnData = {
@@ -218,7 +225,8 @@ var saturnData = {
   position: new THREE.Vector3(400, 0, 0),
   distance: 250,
   velocity: new THREE.Vector3(900000.0, 0.0, 10000000.0),
-  planet: saturn
+  planet: saturn, 
+  increment: 0.0000001 * 0.0662
 }
 
 var uranusData = {
@@ -226,7 +234,8 @@ var uranusData = {
   position: new THREE.Vector3(450, 0, 0),
   distance: 300,
   velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
-  planet: uranus
+  planet: uranus, 
+  increment: 0.0000001  * 0.03076
 }
 
 var neptuneData = {
@@ -234,7 +243,8 @@ var neptuneData = {
   position: new THREE.Vector3(500, 70, 0),
   distance: 400,
   velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
-  planet: neptune
+  planet: neptune, 
+  increment: 0.0000001 * 0.02384
 }
 
 system.push("mercury")
@@ -363,6 +373,8 @@ var render = function() {
 
     for (let i = 0; i < planetData.length; i++)
     {
+      let increment = planetData[i].increment * speedScale;
+      //console.log(increment)
 
       let accelX = forcesX[i] / planetData[i].mass;
       let accelY = forcesY[i] / planetData[i].mass;
