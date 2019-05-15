@@ -246,8 +246,6 @@ system.push("saturn")
 system.push("uranus")
 system.push("neptune")
 
-debugger;
-
 mercury.position.x = 45;
 mercury.position.y = 25;
 venus.position.x = 100;

@@ -1,13 +1,13 @@
 this.sceneDatGui = new dat.GUI(); // controls the meshes in the scene
-this.controlListDatGui = new dat.GUI(); // controls each of the meshes
 this.sceneObject = new SceneObject(scene);
+var inSceneGui = this.sceneDatGui.addFolder('Add or Remove Objects');
 
 var planetNames = ['mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'earth'];
 
 for (var i = 0; i < planetNames.length; i++) {
   this.sceneObject[planetNames[i]] = true;
   this.sceneObject.bodies[planetNames[i]] = new PlanetInfo();
-  var controller = this.sceneDatGui.add(this.sceneObject, planetNames[i]);
+  var controller = inSceneGui.add(this.sceneObject, planetNames[i]);
   this.sceneObject.bodies[planetNames[i]].controller = controller;
   this.sceneObject.bodies[planetNames[i]].mesh = window[planetNames[i]];
 }
@@ -20,16 +20,21 @@ var moonObject = new PlanetInfo();
 moonObject.mesh = window['moon'];
 this.sceneObject.bodies['moon'] = moonObject;
 this.sceneObject['moon'] = true;
-moonObject.controller = this.sceneDatGui.add(this.sceneObject, 'moon');
+moonObject.controller = inSceneGui.add(this.sceneObject, 'moon');
 
 
 // controlling the pause functionality
 var pauseController = this.sceneDatGui.add(this.sceneObject, 'pause');
-pauseController.onChange(function(value) { console.log(pause); pause = sceneObject.pause; });
+pauseController.onChange(function(value) { pause = sceneObject.pause; });
+
+// controling the speed 
+var speedController = this.sceneDatGui.add(this.sceneObject, 'speed', 1, 6);
+speedController.onFinishChange(function(value) {
+  // Fires when a controller loses focus.
+  alert("The new value is " + value);
+});
 
 // handling the controller events for the planet visibility
-
-
 this.sceneObject.bodies.mercury.controller.onChange(function(value) {
   if (value) scene.add(this.object.bodies.mercury.mesh);
   else scene.remove(this.object.bodies.mercury.mesh);
@@ -76,6 +81,7 @@ this.sceneObject.bodies.moon.controller.onChange(function(value) {
 function SceneObject(scene) {
   this.scene = scene;
   this.bodies = {};
+  this.speed = 1;
   this.pause = false;
 }
 
