@@ -13,6 +13,51 @@ function loadObject(objfile, mtlfile) {
   });
 }
 
+let raycaster = new THREE.Raycaster();
+let objectPlanets = [];
+let selection = null;
+
+document.addEventListener('mousedown', onDocumentMouseDown)
+
+let planetFollow = null;
+function onDocumentMouseDown(event) {
+  //console.log("yo")
+  // Get mouse position
+  var mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+  var mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+  // Get 3D vector from 3D mouse position using 'unproject' function
+  var vector = new THREE.Vector3(mouseX, mouseY, 1);
+  vector.unproject(camera);
+  // Set the raycaster position
+  raycaster.set(camera.position, vector.sub(camera.position ).normalize() );
+  // Find all intersected objects
+  var intersects = raycaster.intersectObjects(objectPlanets);
+  if (intersects.length > 0) {
+    // Disable the controls
+    controls.enabled = false;
+    // Set the selection - first intersected object
+    selection = intersects[0].object;
+    //console.log("hello")
+
+    if (planetFollow !== selection)
+    {
+      planetFollow = selection
+    }
+    else
+    {
+      planetFollow = null;
+      controls.enabled = true;
+    }
+  }
+    // Calculate the offset
+    //console.log(planetFollow)
+
+    //var intersects = raycaster.intersectObject(lesson10.plane);
+    //lesson10.offset.copy(intersects[0].point).sub(lesson10.plane.position);
+  }
+
+
+
 function createPlanet(texture, radius, d, specTexture, normalTexture) {
   var planetGeometry = new THREE.SphereGeometry(radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
   if (!(d === undefined)) planetGeometry.translate(d.x, d.y, d.z);
@@ -156,6 +201,15 @@ scene.add(saturn);
 scene.add(uranus);
 scene.add(neptune);
 
+objectPlanets.push(mercury);
+objectPlanets.push(venus);
+objectPlanets.push(mars);
+objectPlanets.push(earth);
+objectPlanets.push(jupiter);
+objectPlanets.push(saturn);
+objectPlanets.push(uranus);
+objectPlanets.push(neptune);
+
 const sunMass = 1.989 * Math.pow(10, 30);
 const G = 6.67 * Math.pow(10, -11);
 const venusDist = 70;
@@ -172,7 +226,7 @@ let system = [];
 
 let planetData = [];
 
-let speedScale = 2;
+let speedScale = 1;
 
 var mercuryData = {
   mass: 3.370 * Math.pow(10, 21),
@@ -329,9 +383,10 @@ clouds.geometry.center();
 
 var render = function() {
   requestAnimationFrame(render);
-  earth.rotation.y += 0.005;
-  clouds.rotation.y -= 0.0025;
+
   if (!pause) {
+    earth.rotation.y -= 0.05;
+    clouds.rotation.y += 0.0025;
     let forcesX = [];
     let forcesY = [];
     let forcesZ = [];
@@ -395,6 +450,30 @@ var render = function() {
         moon.position.z = earth.position.z + r * Math.sin(theta);
       }
       planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
+      //console.log(planetFollow)
+      if (planetFollow === planetData[i].planet)
+      {
+        //console.log(planetFollow)
+        //camera.position = new THREE.Vector3(planetData[i].planet.position.x, planetData[i].planet.position.y, planetData[i].planet.position.z - 10);
+          let sunToPlanet = new THREE.Vector3(planetData[i].planet.position.x - sun.position.x, planetData[i].planet.position.y - sun.position.y, planetData[i].planet.position.z - sun.position.z);
+          sunToPlanet.normalize();
+          camera.position.x = planetData[i].planet.position.x + sunToPlanet.x * 10;
+          
+          camera.position.z = planetData[i].planet.position.z + sunToPlanet.z * 10;
+
+          //console.log(earth.position.y)
+
+          if (planetData[i].planet == earth)
+          {
+            camera.position.y = 5;
+            //console.log("yo")
+          }
+          else
+          {
+            camera.position.y = planetData[i].planet.position.y + sunToPlanet.y * 10;
+          }
+      
+      }
     }
   }
 
