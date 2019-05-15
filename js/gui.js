@@ -80,10 +80,6 @@ function SceneObject(scene) {
 }
 
 function PlanetInfo() {
-  this.radius = 1;
-  this.mass = 1;
-  this.speed = 10;
-  this.location = new THREE.Vector3(0, 4, -5);
   this.inScene = false;
   this.controller = undefined;
   this.mesh = undefined;
