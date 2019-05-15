@@ -2,14 +2,35 @@
 <html>
   <head>
     <title>3D Solar System Simulation</title>
-    <style>
+    <!-- <style>
       html, body { margin: 0; padding: 0; overflow: hidden; }
-    </style>
+    </style> -->
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+    <style type="text/css">
+    	body {
+				font-family: Monospace;
+        font-size: 16px;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+        font-size: 24px;
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+			}
+			#names {
+				font-size: 18px;
+			}
+    </style>
   </head>
   <body>
     <script src="js/three.min.js/three.min.js"></script>
@@ -20,6 +41,9 @@
     <script src="libjs/TrackballControls.js"></script>
     <script src="libjs/OrbitControls.js"></script>
     <script src="libjs/Lensflare.js"></script>
+    <div id="info">COS426 Final Project &mdash; Nbody 2.0: 3D Solar System Model<br> 
+    	<p id="names">Shamailah Azam &mdash; Simisola Olofinboba &mdash; Niranjan Shankar</p>
+    </div>
     <script src="js/renderer.js"></script>
     <script src="js/gui.js"></script>
   </body>

@@ -380,13 +380,34 @@ var theta = 0;
 var dTheta = 2 * Math.PI / 300;
 earth.geometry.center();
 clouds.geometry.center();
+venus.geometry.center();
+clouds.geometry.center();
+moon.geometry.center();
+mars.geometry.center();
+mercury.geometry.center();
+jupiter.geometry.center();
+saturn.geometry.center();
+uranus.geometry.center();
+neptune.geometry.center();
 
 var render = function() {
   requestAnimationFrame(render);
 
+  earth.rotation.y -= 0.05;
+  clouds.rotation.y -= 0.0025;
+  venus.rotation.y -= 0.05;
+  clouds.rotation.y -= 0.05;
+  moon.rotation.y += 0.005;
+  mars.rotation.y -= 0.05;
+  mercury.rotation.y -= 0.05;
+  jupiter.rotation.y -= 0.05;
+  saturn.rotation.y -= 0.05;
+  uranus.rotation.y += 0.05;
+  neptune.rotation.y -= 0.05;
+
   if (!pause) {
-    earth.rotation.y -= 0.05;
-    clouds.rotation.y += 0.0025;
+    //earth.rotation.y -= 0.05;
+    //clouds.rotation.y += 0.0025;
     let forcesX = [];
     let forcesY = [];
     let forcesZ = [];
@@ -430,7 +451,7 @@ var render = function() {
     {
       let increment = planetData[i].increment * speedScale;
       //console.log(increment)
-
+      
       let accelX = forcesX[i] / planetData[i].mass;
       let accelY = forcesY[i] / planetData[i].mass;
       let accelZ = forcesZ[i] / planetData[i].mass;
