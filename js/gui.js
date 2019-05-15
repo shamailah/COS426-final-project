@@ -28,10 +28,10 @@ var pauseController = this.sceneDatGui.add(this.sceneObject, 'pause');
 pauseController.onChange(function(value) { pause = sceneObject.pause; });
 
 // controling the speed 
-var speedController = this.sceneDatGui.add(this.sceneObject, 'speed', 1, 6);
+var speedController = this.sceneDatGui.add(this.sceneObject, 'speed', 1, 20);
 speedController.onFinishChange(function(value) {
   // Fires when a controller loses focus.
-  alert("The new value is " + value);
+  speedScale = value;
 });
 
 // handling the controller events for the planet visibility
@@ -81,7 +81,7 @@ this.sceneObject.bodies.moon.controller.onChange(function(value) {
 function SceneObject(scene) {
   this.scene = scene;
   this.bodies = {};
-  this.speed = 1;
+  this.speed = speedScale;
   this.pause = false;
 }
 
