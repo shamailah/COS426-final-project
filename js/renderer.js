@@ -2,12 +2,13 @@ let objects = []
 
 var pause = false;
 
-function loadObject(objfile, mtlfile) {
+function loadObject(objfile, mtlfile, scale) {
   let mtlloader = new THREE.MTLLoader();
   mtlloader.load(mtlfile, function(materials) {
     let objloader = new THREE.OBJLoader();
     objloader.setMaterials(materials);
     objloader.load(objfile, function(object) {
+      if (!(scale === undefined)) object.scale.set(scale.x, scale.y, scale.z);
       scene.add(object);
       objects.push(object);
     });
@@ -44,9 +45,8 @@ function createClouds(texture, radius) {
 
 function createSun(texture, radius, position) {
   let sunGeometry = new THREE.SphereGeometry(radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
-  let sunMaterial = new THREE.MeshBasicMaterial();
   let sunTexture = new THREE.TextureLoader().load(texture);
-  sunMaterial.map = sunTexture;
+  let sunMaterial = new THREE.MeshBasicMaterial({map: sunTexture});
   let sun = new THREE.Mesh(sunGeometry, sunMaterial);
   if (!(position === undefined)) sun.position.set(position.x, position.y, position.z);
 
@@ -73,7 +73,15 @@ let camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000 );
 let light = new THREE.PointLight(0xEEEEEE);
 let lightAmb = new THREE.AmbientLight(0x777777);
 let renderer = new THREE.WebGLRenderer({antialias: true});
+let raycaster = new THREE.Raycaster();
 let controls = new THREE.OrbitControls(camera);
+let dragControls = new THREE.DragControls(objects, camera, renderer.domElement);
+dragControls.addEventListener('dragstart', function() {
+  controls.enabled = false;
+});
+dragControls.addEventListener('dragend', function() {
+  controls.enabled = true;
+});
 
 // create all the planets
 let sun = createSun("textures/sunSurfaceMaterial.jpg", 4, new THREE.Vector3(0, 4, -5));
@@ -103,7 +111,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 light.position.set(20, 0, 20);
 camera.position.z = 20;
-// scene.add(light);
+scene.add(light);
 scene.add(lightAmb);
 scene.add(sun);
 scene.add(mercury);
@@ -250,9 +258,9 @@ for (let i = 0; i < system.length; i++)
 }
 
 
-loadObject("obj/astronaut.obj", "mtl/astronaut.mtl");
-// loadObject("obj/rocket.obj", "mtl/rocket.mtl");
-// loadObject("obj/asteroid.obj", "mtl/asteroid.mtl");
+loadObject("obj/astronaut.obj", "mtl/astronaut.mtl", new THREE.Vector3(0.5, 0.5, 0.5));
+loadObject("obj/rocket.obj", "mtl/rocket.mtl", new THREE.Vector3(0.01, 0.01, 0.01));
+loadObject("obj/asteroid.obj", "mtl/asteroid.mtl", new THREE.Vector3(0.001, 0.001, 0.001));
 
 // Load the background texture
 let texture = new THREE.TextureLoader().load('textures/stars_milky_way.jpg');
