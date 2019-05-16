@@ -42,6 +42,7 @@ function onDocumentMouseDown(event) {
     if (planetFollow !== selection)
     {
       planetFollow = selection
+      //console.log(planetFollow);
     }
     else
     {
@@ -301,6 +302,15 @@ var neptuneData = {
   increment: 0.0000001 * 0.02384
 }
 
+var moonData = {
+  mass: 7.3 * Math.pow(10, 22),
+  position: new THREE.Vector3(131.00011, 0, 0),
+  distance: 130,
+  velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
+  planet: moon,
+  increment: 0.0000001 * 0.717
+}
+
 system.push("mercury")
 system.push("venus")
 system.push("earth")
@@ -309,6 +319,7 @@ system.push("jupiter")
 system.push("saturn")
 system.push("uranus")
 system.push("neptune")
+//system.push("moon")
 
 mercury.position.x = 30;
 mercury.position.z = -5;
@@ -316,6 +327,7 @@ mercury.position.y = 10;
 venus.position.x = 70;
 venus.position.y = -5;
 earth.position.x = 120;
+moon.position.x = 120;
 mars.position.x = 195;
 mars.position.y = 5;
 jupiter.position.x = 295;
@@ -351,6 +363,7 @@ for (let i = 0; i < system.length; i++)
   if (system[i] === "neptune"){
     planetData.push(neptuneData)
   }
+
 }
 
 
@@ -399,7 +412,7 @@ var render = function() {
   clouds.rotation.y -= 0.0025 * speedScale;
   venus.rotation.y += 0.05 * speedScale;
   clouds.rotation.y -= 0.05 * speedScale;
-  moon.rotation.y += 0.005 * speedScale;
+  moon.rotation.y -= 0.005 * speedScale;
   mars.rotation.y -= 0.05 * speedScale;
   mercury.rotation.y -= 0.05 * speedScale;
   jupiter.rotation.y -= 0.05 * speedScale;
