@@ -2,13 +2,14 @@ let objects = []
 
 var pause = false;
 
-function loadObject(objfile, mtlfile, scale) {
+function loadObject(objfile, mtlfile, scale, position) {
   let mtlloader = new THREE.MTLLoader();
   mtlloader.load(mtlfile, function(materials) {
     let objloader = new THREE.OBJLoader();
     objloader.setMaterials(materials);
     objloader.load(objfile, function(object) {
       if (!(scale === undefined)) object.scale.set(scale.x, scale.y, scale.z);
+      if (!(position === undefined)) object.position.set(position.x, position.y, position.z);
       scene.add(object);
       objects.push(object);
     });
@@ -84,24 +85,25 @@ dragControls.addEventListener('dragend', function() {
 });
 
 // create all the planets
-let sun = createSun("textures/sunSurfaceMaterial.jpg", 4, new THREE.Vector3(0, 4, -5));
-let mercury = createPlanet("textures/mercury.jpg", 2, new THREE.Vector3(-15, 0, 0));
-let venus = createPlanet("textures/venus_surface.jpg", 2, new THREE.Vector3(-10, 0, 0));
+let sun = createSun("textures/sunSurfaceMaterial.jpg", 4);
+let mercury = createPlanet("textures/mercury.jpg", 2);
+let venus = createPlanet("textures/venus_surface.jpg", 2);
 let earth = createPlanet("textures/earth.jpg", 2, undefined, "textures/earthspecmap.jpg", "textures/earthnormalmap.jpeg");
 let clouds = createClouds("/textures/clouds_2.jpg", 2.05);
 let moon = createPlanet("textures/moon_texture.jpg", 0.5);
-let mars = createPlanet("textures/mars.jpg", 2, new THREE.Vector3(-5, 0, 0));
-let jupiter = createPlanet("textures/jupiter.jpg", 2, new THREE.Vector3(5, 0, 0));
-let saturn = createPlanet("textures/saturn.jpg", 2, new THREE.Vector3(10, 0, 0));
-let ring = createRing("textures/saturn_ring.png", 3, new THREE.Vector3(10, 0, 0));
-let uranus = createPlanet("textures/uranusmap.jpg", 2, new THREE.Vector3(15, 0, 0));
-let neptune = createPlanet("textures/neptune.jpg", 2, new THREE.Vector3(20, 0, 0));
+let mars = createPlanet("textures/mars.jpg", 2);
+let jupiter = createPlanet("textures/jupiter.jpg", 2);
+let saturn = createPlanet("textures/saturn.jpg", 2);
+let ring = createRing("textures/saturn_ring.png", 3);
+let uranus = createPlanet("textures/uranusmap.jpg", 2);
+let neptune = createPlanet("textures/neptune.jpg", 2);
 
 // Controls
 controls.enablePan = true;
 controls.enableZoom = true;
 controls.enableRotate = true;
 controls.enableKeys = true;
+controls.keyPanSpeed = 20;
 // controls.minDistance
 // controls.maxDistance
 // controls.minPolarAngle
@@ -111,7 +113,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 light.position.set(20, 0, 20);
 camera.position.z = 20;
-scene.add(light);
+// scene.add(light);
 scene.add(lightAmb);
 scene.add(sun);
 scene.add(mercury);
@@ -122,6 +124,7 @@ scene.add(moon);
 scene.add(mars);
 scene.add(jupiter);
 scene.add(saturn);
+// scene.add(ring);
 scene.add(uranus);
 scene.add(neptune);
 
@@ -258,9 +261,9 @@ for (let i = 0; i < system.length; i++)
 }
 
 
-loadObject("obj/astronaut.obj", "mtl/astronaut.mtl", new THREE.Vector3(0.5, 0.5, 0.5));
-loadObject("obj/rocket.obj", "mtl/rocket.mtl", new THREE.Vector3(0.01, 0.01, 0.01));
-loadObject("obj/asteroid.obj", "mtl/asteroid.mtl", new THREE.Vector3(0.001, 0.001, 0.001));
+loadObject("obj/astronaut.obj", "mtl/astronaut.mtl", new THREE.Vector3(0.5, 0.5, 0.5), new THREE.Vector3(6, .25, 8));
+loadObject("obj/rocket.obj", "mtl/rocket.mtl", new THREE.Vector3(0.01, 0.01, 0.01), new THREE.Vector3(5, 0, 5));
+loadObject("obj/asteroid.obj", "mtl/asteroid.mtl", new THREE.Vector3(0.001, 0.001, 0.001), new THREE.Vector3(5.25, 0, 11));
 
 // Load the background texture
 let texture = new THREE.TextureLoader().load('textures/stars_milky_way.jpg');
