@@ -9,6 +9,7 @@ for (var i = 0; i < planetNames.length; i++) {
   this.sceneObject.bodies[planetNames[i]] = new PlanetInfo();
   var controller = inSceneGui.add(this.sceneObject, planetNames[i]);
   this.sceneObject.bodies[planetNames[i]].controller = controller;
+  // debugger;
   this.sceneObject.bodies[planetNames[i]].mesh = window[planetNames[i]];
 }
 
@@ -44,41 +45,41 @@ addTrailsController.onChange (function(value) {
 
 // handling the controller events for the planet visibility
 this.sceneObject.bodies.mercury.controller.name('Mercury').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.mercury.mesh);
-  else scene.remove(this.object.bodies.mercury.mesh);
+  if (value) scene.add(mmercury);
+  else scene.remove(mercury);
 });
 this.sceneObject.bodies.venus.controller.name('Venus').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.venus.mesh);
-  else scene.remove(this.object.bodies.venus.mesh);
+  if (value) scene.add(venus);
+  else scene.remove(venus);
 });
 this.sceneObject.bodies.mars.controller.name('Mars').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.mars.mesh);
-  else scene.remove(this.object.bodies.mars.mesh);
+  if (value) scene.add(mars);
+  else scene.remove(mars);
 });
 this.sceneObject.bodies.jupiter.controller.name('Jupiter').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.jupiter.mesh);
-  else scene.remove(this.object.bodies.jupiter.mesh);
+  if (value) scene.add(jupiter);
+  else scene.remove(jupiter);
 });
 this.sceneObject.bodies.saturn.controller.name('Saturn').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.saturn.mesh);
-  else scene.remove(this.object.bodies.saturn.mesh);
+  if (value) scene.add(saturn);
+  else scene.remove(saturn);
 });
 this.sceneObject.bodies.uranus.controller.name('Uranus').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.uranus.mesh);
-  else scene.remove(this.object.bodies.uranus.mesh);
+  if (value) scene.add(uranus);
+  else scene.remove(uranus);
 });
 this.sceneObject.bodies.neptune.controller.name('Neptune').onChange(function(value) {
-  if (value) scene.add(this.object.bodies.neptune.mesh);
-  else scene.remove(this.object.bodies.neptune.mesh);
+  if (value) scene.add(neptune);
+  else scene.remove(neptune);
 });
 this.sceneObject.bodies.earth.controller.name('Earth').onChange(function(value) {
   if (value) {
-    scene.add(this.object.bodies.earth.mesh);
-    scene.add(this.object.bodies.clouds.mesh);
+    scene.add(earth);
+    scene.add(clouds);
   }
   else {
-    scene.remove(this.object.bodies.earth.mesh);
-    scene.remove(this.object.bodies.clouds.mesh);
+    scene.remove(earth);
+    scene.remove(clouds);
   }
 });
 this.sceneObject.bodies.moon.controller.name('Moon').onChange(function(value) {
