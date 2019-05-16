@@ -107,6 +107,7 @@ function createSun(texture, radius, position) {
 
 
 var scene = new THREE.Scene();
+console.log(scene);
 var aspect = window.innerWidth / window.innerHeight;
 var camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000 );
 var light = new THREE.PointLight(0xEEEEEE);
@@ -336,9 +337,28 @@ saturn.geometry.center();
 uranus.geometry.center();
 neptune.geometry.center();
 
+// adding the trails
+var trailHeadGeometry = [];
+var circle = new THREE.CircleGeometry( 1, 3 );
+trailHeadGeometry = circle.vertices;
+
+var trail = new THREE.TrailRenderer( scene, false );
+
+// create material for the trail renderer
+var trailMaterial = THREE.TrailRenderer.createBaseMaterial(); 
+trailMaterial.uniforms.headColor.value.set(1,1,1,1);
+trailMaterial.uniforms.tailColor.value.set(1,1,1,1);
+
+// specify length of trail
+var trailLength = 1000;
+
+// initialize the trail
+trail.initialize( trailMaterial, trailLength, false ? 1.0 : 0.0, 0, trailHeadGeometry, earth );
+trail.activate();
+
 var render = function() {
   requestAnimationFrame(render);
-  earth.rotation.y += 0.005;
+  // earth.rotation.y += 0.005;
   clouds.rotation.y -= 0.0025;
   venus.rotation.y += 0.005;
   clouds.rotation.y += 0.005;
@@ -394,7 +414,7 @@ var render = function() {
     {
       let increment = planetData[i].increment * speedScale;
       //console.log(increment)
-      
+
       let accelX = forcesX[i] / planetData[i].mass;
       let accelY = forcesY[i] / planetData[i].mass;
       let accelZ = forcesZ[i] / planetData[i].mass;
@@ -418,9 +438,11 @@ var render = function() {
   }
 
   controls.update();
+  trail.advance();
   renderer.autoClear = false;
   renderer.clear();
   renderer.render(backgroundScene, backgroundCamera);
+  // debugger;
   renderer.render(scene, camera);
 };
 
