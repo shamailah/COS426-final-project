@@ -13,6 +13,53 @@ function loadObject(objfile, mtlfile) {
   });
 }
 
+let raycaster = new THREE.Raycaster();
+let objectPlanets = [];
+let selection = null;
+
+document.addEventListener('mousedown', onDocumentMouseDown)
+
+let planetFollow = null;
+function onDocumentMouseDown(event) {
+  //console.log("yo")
+  // Get mouse position
+  var mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+  var mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+  // Get 3D vector from 3D mouse position using 'unproject' function
+  var vector = new THREE.Vector3(mouseX, mouseY, 1);
+  vector.unproject(camera);
+  // Set the raycaster position
+  raycaster.set(camera.position, vector.sub(camera.position ).normalize() );
+  // Find all intersected objects
+  var intersects = raycaster.intersectObjects(objectPlanets);
+  if (intersects.length > 0) {
+    // Disable the controls
+    controls.enabled = false;
+    // Set the selection - first intersected object
+    selection = intersects[0].object;
+    //console.log("hello")
+
+    if (planetFollow !== selection)
+    {
+      planetFollow = selection;
+      pause = false;
+      sceneObject.pause = false;
+    }
+    else
+    {
+      planetFollow = null;
+      controls.enabled = true;
+    }
+  }
+    // Calculate the offset
+    //console.log(planetFollow)
+
+    //var intersects = raycaster.intersectObject(lesson10.plane);
+    //lesson10.offset.copy(intersects[0].point).sub(lesson10.plane.position);
+  }
+
+
+
 function createPlanet(texture, radius, d, specTexture, normalTexture) {
   var planetGeometry = new THREE.SphereGeometry(radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
   if (!(d === undefined)) planetGeometry.translate(d.x, d.y, d.z);
@@ -89,6 +136,49 @@ function createSunMaterial() {
   });
 }
 
+var trails = [];
+var trailsActivated = false;
+function addTrail(planet) {
+    // adding the trails
+    var trailHeadGeometry = [];
+    var circle = new THREE.CircleGeometry( 1, 3 );
+    trailHeadGeometry = circle.vertices;
+
+    var trail = new THREE.TrailRenderer( scene, false );
+
+    // create material for the trail renderer
+    var trailMaterial = THREE.TrailRenderer.createBaseMaterial(); 
+    trailMaterial.uniforms.headColor.value.set(1,1,1,1);
+    trailMaterial.uniforms.tailColor.value.set(1,1,1,1);
+
+    // specify length of trail
+    var trailLength = 1000;
+
+    // initialize the trail
+    trail.initialize( trailMaterial, trailLength, false ? 1.0 : 0.0, 0, trailHeadGeometry, planet );
+
+    trails.push(trail);
+}
+
+function activateTrails() {
+  debugger;
+  for (var i = 0; i < trails.length; i++) {
+    trails[i].activate();
+  }
+}
+function deactivateTrails() {
+  for (var i = 0; i < trails.length; i++) {
+    trails[i].deactivate();
+  }
+}
+function advanceTrails() {
+  for (var i = 0; i < trails.length; i++) {
+    trails[i].advance();
+  }
+}
+
+
+
 function createSun(texture, radius, position) {
   var sunGeometry = new THREE.SphereGeometry(radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
   if (!(position === undefined)) sunGeometry.translate(position.x, position.y, position.z);
@@ -116,7 +206,7 @@ var renderer = new THREE.WebGLRenderer({antialias: true});
 var controls = new THREE.OrbitControls(camera);
 
 // create all the planets
-var sun = createSun("textures/sunSurfaceMaterial.jpg", 4, new THREE.Vector3(0, 4, -5));
+var sun = createSun("textures/sunSurfaceMaterial.jpg", 4, new THREE.Vector3(0, 0, 0));
 var mercury = createPlanet("textures/mercury.jpg", 2, new THREE.Vector3(-15, 0, 0));
 var venus = createPlanet("textures/venus_surface.jpg", 2, new THREE.Vector3(-10, 0, 0));
 var earth = createPlanet("textures/earth.jpg", 2, undefined, "textures/earthspecmap.jpg", "textures/earthnormalmap.jpeg");
@@ -157,6 +247,24 @@ scene.add(saturn);
 scene.add(uranus);
 scene.add(neptune);
 
+addTrail(venus);
+addTrail(earth);
+addTrail(mars);
+addTrail(mercury);
+addTrail(jupiter);
+addTrail(saturn);
+addTrail(uranus);
+addTrail(neptune);
+
+objectPlanets.push(mercury);
+objectPlanets.push(venus);
+objectPlanets.push(mars);
+objectPlanets.push(earth);
+objectPlanets.push(jupiter);
+objectPlanets.push(saturn);
+objectPlanets.push(uranus);
+objectPlanets.push(neptune);
+
 const sunMass = 1.989 * Math.pow(10, 30);
 const G = 6.67 * Math.pow(10, -11);
 const venusDist = 70;
@@ -173,12 +281,12 @@ let system = [];
 
 let planetData = [];
 
-let speedScale = 2;
+let speedScale = 1;
 
 var mercuryData = {
   mass: 3.370 * Math.pow(10, 21),
-  position: new THREE.Vector3(30, 25, 0),
-  distance: 64,
+  position: new THREE.Vector3(30, 10, 0),
+  distance: 65,
   velocity: new THREE.Vector3(19900.0, 0.0, 9900900.0),
   planet: mercury,
   increment: 0.0000001
@@ -186,8 +294,8 @@ var mercuryData = {
 
 var venusData = {
   mass: 5.970 * Math.pow(10, 24),
-  position: new THREE.Vector3(70, -20, 0),
-  distance: 110,
+  position: new THREE.Vector3(70, -7, 0),
+  distance: 90,
   velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
   planet: venus,
   increment: 0.0000001 * 0.933
@@ -204,8 +312,8 @@ var earthData = {
 
 var marsData = {
   mass: 4.4190 * Math.pow(10, 22),
-  position: new THREE.Vector3(190, 45, 0),
-  distance: 205,
+  position: new THREE.Vector3(190, 5, 0),
+  distance: 200,
   velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
   planet: mars,
   increment: 0.0000001 * 0.7532
@@ -241,34 +349,37 @@ var uranusData = {
 
 var neptuneData = {
   mass: 1.08 * Math.pow(10, 27),
-  position: new THREE.Vector3(500, 70, 0),
-  distance: 400,
-  velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
+  position: new THREE.Vector3(500, 0, 0),
+  distance: 430,
+  velocity: new THREE.Vector3(990000.0, 0.0, 9999000.0),
   planet: neptune, 
   increment: 0.0000001 * 0.02384
 }
 
-system.push("mercury")
-system.push("venus")
-system.push("earth")
-system.push("mars")
-system.push("jupiter")
-system.push("saturn")
-system.push("uranus")
-system.push("neptune")
+system.push("mercury");
+system.push("venus");
+system.push("earth");
+system.push("mars");
+system.push("jupiter");
+system.push("saturn");
+system.push("uranus");
+system.push("neptune");
 
-mercury.position.x = 45;
-mercury.position.y = 25;
-venus.position.x = 100;
-venus.position.y = -35;
+
+
+mercury.position.x = 30;
+mercury.position.z = -5;
+mercury.position.y = 10;
+venus.position.x = 70;
+venus.position.y = -5;
 earth.position.x = 120;
 mars.position.x = 195;
-mars.position.y = 40;
+mars.position.y = 5;
 jupiter.position.x = 295;
 saturn.position.x = 375;
 uranus.position.x = 430;
-neptune.position.x = 470;
-neptune.position.y = 50;
+neptune.position.x = 500;
+neptune.position.y = 0;
 
 for (let i = 0; i < system.length; i++)
 {
@@ -337,40 +448,25 @@ saturn.geometry.center();
 uranus.geometry.center();
 neptune.geometry.center();
 
-// adding the trails
-var trailHeadGeometry = [];
-var circle = new THREE.CircleGeometry( 1, 3 );
-trailHeadGeometry = circle.vertices;
-
-var trail = new THREE.TrailRenderer( scene, false );
-
-// create material for the trail renderer
-var trailMaterial = THREE.TrailRenderer.createBaseMaterial(); 
-trailMaterial.uniforms.headColor.value.set(1,1,1,1);
-trailMaterial.uniforms.tailColor.value.set(1,1,1,1);
-
-// specify length of trail
-var trailLength = 1000;
-
-// initialize the trail
-trail.initialize( trailMaterial, trailLength, false ? 1.0 : 0.0, 0, trailHeadGeometry, earth );
-trail.activate();
-
 var render = function() {
   requestAnimationFrame(render);
-  // earth.rotation.y += 0.005;
-  clouds.rotation.y -= 0.0025;
-  venus.rotation.y += 0.005;
-  clouds.rotation.y += 0.005;
-  moon.rotation.y += 0.005;
-  mars.rotation.y += 0.005;
-  mercury.rotation.y += 0.005;
-  jupiter.rotation.y += 0.005;
-  saturn.rotation.y += 0.005;
-  uranus.rotation.y += 0.005;
-  neptune.rotation.y += 0.005;
+  if (!trailsActivated) {
+    earth.rotation.y += 0.005;
+    clouds.rotation.y -= 0.0025;
+    venus.rotation.y += 0.005;
+    clouds.rotation.y += 0.005;
+    moon.rotation.y += 0.005;
+    mars.rotation.y += 0.005;
+    mercury.rotation.y += 0.005;
+    jupiter.rotation.y += 0.005;
+    saturn.rotation.y += 0.005;
+    uranus.rotation.y += 0.005;
+    neptune.rotation.y += 0.005;
+  }
 
   if (!pause) {
+    //earth.rotation.y -= 0.05;
+    //clouds.rotation.y += 0.0025;
     let forcesX = [];
     let forcesY = [];
     let forcesZ = [];
@@ -414,7 +510,7 @@ var render = function() {
     {
       let increment = planetData[i].increment * speedScale;
       //console.log(increment)
-
+      
       let accelX = forcesX[i] / planetData[i].mass;
       let accelY = forcesY[i] / planetData[i].mass;
       let accelZ = forcesZ[i] / planetData[i].mass;
@@ -434,15 +530,34 @@ var render = function() {
         moon.position.z = earth.position.z + r * Math.sin(theta);
       }
       planetData[i].velocity = new THREE.Vector3(xVel, yVel, zVel);
+      //console.log(planetFollow)
+      if (planetFollow === planetData[i].planet)
+      {
+        //console.log(planetFollow)
+        //camera.position = new THREE.Vector3(planetData[i].planet.position.x, planetData[i].planet.position.y, planetData[i].planet.position.z - 10);
+          let sunToPlanet = new THREE.Vector3(planetData[i].planet.position.x - sun.position.x, planetData[i].planet.position.y - sun.position.y, planetData[i].planet.position.z - sun.position.z);
+          sunToPlanet.normalize();
+          camera.position.x = planetData[i].planet.position.x + sunToPlanet.x * 10;
+          
+          camera.position.z = planetData[i].planet.position.z + sunToPlanet.z * 10;
+
+          //console.log(earth.position.y)
+
+          
+          camera.position.y = 5 + planetData[i].planet.position.y;
+            //console.log("yo")
+       
+          //camera.position.y = planetData[i].position.y + 5;
+      
+      }
     }
   }
 
   controls.update();
-  trail.advance();
+  advanceTrails();
   renderer.autoClear = false;
   renderer.clear();
   renderer.render(backgroundScene, backgroundCamera);
-  // debugger;
   renderer.render(scene, camera);
 };
 
