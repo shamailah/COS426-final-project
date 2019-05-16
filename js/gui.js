@@ -25,7 +25,7 @@ moonObject.controller = inSceneGui.add(this.sceneObject, 'moon');
 
 // controlling the pause functionality
 var pauseController = this.sceneDatGui.add(this.sceneObject, 'pause');
-pauseController.onChange(function(value) { pause = sceneObject.pause; });
+pauseController.onChange(function(value) { pause = this.sceneObject.pause; });
 
 // controling the speed 
 var speedController = this.sceneDatGui.add(this.sceneObject, 'speed', 1, 20);
@@ -33,6 +33,14 @@ speedController.onFinishChange(function(value) {
   // Fires when a controller loses focus.
   speedScale = value;
 });
+
+// adding in the trails
+var addTrailsController = this.sceneDatGui.add(this.sceneObject, 'showTrails');
+addTrailsController.onChange (function(value) {
+  trailsActivated = value; 
+  if (trailsActivated) activateTrails();
+  else deactivateTrails();
+})
 
 // handling the controller events for the planet visibility
 this.sceneObject.bodies.mercury.controller.onChange(function(value) {
@@ -82,6 +90,7 @@ function SceneObject(scene) {
   this.scene = scene;
   this.bodies = {};
   this.speed = speedScale;
+  this.showTrails = false;
   this.pause = false;
 }
 
