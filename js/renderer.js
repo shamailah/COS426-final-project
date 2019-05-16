@@ -394,17 +394,18 @@ neptune.geometry.center();
 var render = function() {
   requestAnimationFrame(render);
 
-  earth.rotation.y -= 0.05;
-  clouds.rotation.y -= 0.0025;
-  venus.rotation.y += 0.05;
-  clouds.rotation.y -= 0.05;
-  moon.rotation.y += 0.005;
-  mars.rotation.y -= 0.05;
-  mercury.rotation.y -= 0.05;
-  jupiter.rotation.y -= 0.05;
-  saturn.rotation.y -= 0.05;
-  uranus.rotation.y += 0.05;
-  neptune.rotation.y -= 0.05;
+  sun.rotation.y -= 0.05 * speedScale;
+  earth.rotation.y -= 0.05 * speedScale;
+  clouds.rotation.y -= 0.0025 * speedScale;
+  venus.rotation.y += 0.05 * speedScale;
+  clouds.rotation.y -= 0.05 * speedScale;
+  moon.rotation.y += 0.005 * speedScale;
+  mars.rotation.y -= 0.05 * speedScale;
+  mercury.rotation.y -= 0.05 * speedScale;
+  jupiter.rotation.y -= 0.05 * speedScale;
+  saturn.rotation.y -= 0.05 * speedScale;
+  uranus.rotation.y += 0.05 * speedScale;
+  neptune.rotation.y -= 0.05 * speedScale;
 
   if (!pause) {
     //earth.rotation.y -= 0.05;
