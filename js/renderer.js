@@ -117,6 +117,7 @@ function addTrail(planet) {
 
 function activateTrails() {
   for (var i = 0; i < trails.length; i++) {
+    trails[i].reset();
     trails[i].activate();
   }
 }
@@ -534,7 +535,7 @@ let render = function() {
   }
 
   controls.update();
-  advanceTrails();
+  if (trailsActivated) advanceTrails();
   renderer.autoClear = false;
   renderer.clear();
   renderer.render(backgroundScene, backgroundCamera);
