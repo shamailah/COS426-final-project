@@ -389,7 +389,7 @@ let render = function() {
   mercury.rotation.y -= 0.05 * speedScale;
   jupiter.rotation.y -= 0.05 * speedScale;
   saturn.rotation.y -= 0.05 * speedScale;
-  uranus.rotation.y += 0.05 * speedScale;
+  uranus.rotation.z += 0.05 * speedScale;
   neptune.rotation.y -= 0.05 * speedScale;
 
   if (!pause) {
