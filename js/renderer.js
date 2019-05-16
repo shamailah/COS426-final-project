@@ -44,8 +44,9 @@ function onDocumentMouseDown(event) {
 
     if (planetFollow !== selection)
     {
-      planetFollow = selection
-      //console.log(planetFollow);
+      planetFollow = selection;
+      pause = false;
+      sceneObject.pause = false;
     }
     else
     {
@@ -88,6 +89,47 @@ function createClouds(texture, radius) {
   });
   let clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
   return clouds;
+}
+
+var trails = [];
+var trailsActivated = false;
+function addTrail(planet) {
+    // adding the trails
+    var trailHeadGeometry = [];
+    var circle = new THREE.CircleGeometry( 1, 3 );
+    trailHeadGeometry = circle.vertices;
+
+    var trail = new THREE.TrailRenderer( scene, false );
+
+    // create material for the trail renderer
+    var trailMaterial = THREE.TrailRenderer.createBaseMaterial(); 
+    trailMaterial.uniforms.headColor.value.set(1,1,1,1);
+    trailMaterial.uniforms.tailColor.value.set(1,1,1,1);
+
+    // specify length of trail
+    var trailLength = 1000;
+
+    // initialize the trail
+    trail.initialize( trailMaterial, trailLength, false ? 1.0 : 0.0, 0, trailHeadGeometry, planet );
+
+    trails.push(trail);
+}
+
+function activateTrails() {
+  for (var i = 0; i < trails.length; i++) {
+    trails[i].reset();
+    trails[i].activate();
+  }
+}
+function deactivateTrails() {
+  for (var i = 0; i < trails.length; i++) {
+    trails[i].deactivate();
+  }
+}
+function advanceTrails() {
+  for (var i = 0; i < trails.length; i++) {
+    trails[i].advance();
+  }
 }
 
 function createSun(texture, radius, position) {
@@ -172,6 +214,15 @@ scene.add(saturn);
 // scene.add(ring);
 scene.add(uranus);
 scene.add(neptune);
+
+addTrail(venus);
+addTrail(earth);
+addTrail(mars);
+addTrail(mercury);
+addTrail(jupiter);
+addTrail(saturn);
+addTrail(uranus);
+addTrail(neptune);
 
 objectPlanets.push(mercury);
 objectPlanets.push(venus);
@@ -379,18 +430,20 @@ neptune.geometry.center();
 let render = function() {
   requestAnimationFrame(render);
 
-  sun.rotation.y -= 0.05 * speedScale;
-  earth.rotation.y -= 0.05 * speedScale;
-  clouds.rotation.y -= 0.0025 * speedScale;
-  venus.rotation.y += 0.05 * speedScale;
-  clouds.rotation.y -= 0.05 * speedScale;
-  moon.rotation.y -= 0.005 * speedScale;
-  mars.rotation.y -= 0.05 * speedScale;
-  mercury.rotation.y -= 0.05 * speedScale;
-  jupiter.rotation.y -= 0.05 * speedScale;
-  saturn.rotation.y -= 0.05 * speedScale;
-  uranus.rotation.y += 0.05 * speedScale;
-  neptune.rotation.y -= 0.05 * speedScale;
+  if (!trailsActivated) {
+    sun.rotation.y -= 0.05 * speedScale;
+    earth.rotation.y -= 0.05 * speedScale;
+    clouds.rotation.y -= 0.0025 * speedScale;
+    venus.rotation.y += 0.05 * speedScale;
+    clouds.rotation.y -= 0.05 * speedScale;
+    moon.rotation.y -= 0.005 * speedScale;
+    mars.rotation.y -= 0.05 * speedScale;
+    mercury.rotation.y -= 0.05 * speedScale;
+    jupiter.rotation.y -= 0.05 * speedScale;
+    saturn.rotation.y -= 0.05 * speedScale;
+    uranus.rotation.y += 0.05 * speedScale;
+    neptune.rotation.y -= 0.05 * speedScale;
+  }
 
   if (!pause) {
     //earth.rotation.y -= 0.05;
@@ -482,6 +535,7 @@ let render = function() {
   }
 
   controls.update();
+  if (trailsActivated) advanceTrails();
   renderer.autoClear = false;
   renderer.clear();
   renderer.render(backgroundScene, backgroundCamera);
