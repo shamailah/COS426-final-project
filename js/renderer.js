@@ -160,7 +160,7 @@ var renderer = new THREE.WebGLRenderer({antialias: true});
 var controls = new THREE.OrbitControls(camera);
 
 // create all the planets
-var sun = createSun("textures/sunSurfaceMaterial.jpg", 4, new THREE.Vector3(0, 4, -5));
+var sun = createSun("textures/sunSurfaceMaterial.jpg", 4, new THREE.Vector3(0, 0, 0));
 var mercury = createPlanet("textures/mercury.jpg", 2, new THREE.Vector3(-15, 0, 0));
 var venus = createPlanet("textures/venus_surface.jpg", 2, new THREE.Vector3(-10, 0, 0));
 var earth = createPlanet("textures/earth.jpg", 2, undefined, "textures/earthspecmap.jpg", "textures/earthnormalmap.jpeg");
@@ -230,8 +230,8 @@ let speedScale = 1;
 
 var mercuryData = {
   mass: 3.370 * Math.pow(10, 21),
-  position: new THREE.Vector3(30, 25, 0),
-  distance: 64,
+  position: new THREE.Vector3(30, 10, 0),
+  distance: 65,
   velocity: new THREE.Vector3(19900.0, 0.0, 9900900.0),
   planet: mercury,
   increment: 0.0000001
@@ -239,8 +239,8 @@ var mercuryData = {
 
 var venusData = {
   mass: 5.970 * Math.pow(10, 24),
-  position: new THREE.Vector3(70, -20, 0),
-  distance: 110,
+  position: new THREE.Vector3(70, -7, 0),
+  distance: 90,
   velocity: new THREE.Vector3(100000.0, 0.0, 10000000.0),
   planet: venus,
   increment: 0.0000001 * 0.933
@@ -257,8 +257,8 @@ var earthData = {
 
 var marsData = {
   mass: 4.4190 * Math.pow(10, 22),
-  position: new THREE.Vector3(190, 45, 0),
-  distance: 205,
+  position: new THREE.Vector3(190, 5, 0),
+  distance: 200,
   velocity: new THREE.Vector3(1000000.0, 0.0, 10000000.0),
   planet: mars,
   increment: 0.0000001 * 0.7532
@@ -294,9 +294,9 @@ var uranusData = {
 
 var neptuneData = {
   mass: 1.08 * Math.pow(10, 27),
-  position: new THREE.Vector3(500, 70, 0),
-  distance: 400,
-  velocity: new THREE.Vector3(900000.0, 0.0, 9999000.0),
+  position: new THREE.Vector3(500, 0, 0),
+  distance: 430,
+  velocity: new THREE.Vector3(990000.0, 0.0, 9999000.0),
   planet: neptune, 
   increment: 0.0000001 * 0.02384
 }
@@ -310,18 +310,19 @@ system.push("saturn")
 system.push("uranus")
 system.push("neptune")
 
-mercury.position.x = 45;
-mercury.position.y = 25;
-venus.position.x = 100;
-venus.position.y = -35;
+mercury.position.x = 30;
+mercury.position.z = -5;
+mercury.position.y = 10;
+venus.position.x = 70;
+venus.position.y = -5;
 earth.position.x = 120;
 mars.position.x = 195;
-mars.position.y = 40;
+mars.position.y = 5;
 jupiter.position.x = 295;
 saturn.position.x = 375;
 uranus.position.x = 430;
-neptune.position.x = 470;
-neptune.position.y = 50;
+neptune.position.x = 500;
+neptune.position.y = 0;
 
 for (let i = 0; i < system.length; i++)
 {
@@ -395,7 +396,7 @@ var render = function() {
 
   earth.rotation.y -= 0.05;
   clouds.rotation.y -= 0.0025;
-  venus.rotation.y -= 0.05;
+  venus.rotation.y += 0.05;
   clouds.rotation.y -= 0.05;
   moon.rotation.y += 0.005;
   mars.rotation.y -= 0.05;
@@ -484,15 +485,11 @@ var render = function() {
 
           //console.log(earth.position.y)
 
-          if (planetData[i].planet == earth)
-          {
-            camera.position.y = 5;
+          
+          camera.position.y = 5 + planetData[i].planet.position.y;
             //console.log("yo")
-          }
-          else
-          {
-            camera.position.y = planetData[i].planet.position.y + sunToPlanet.y * 10;
-          }
+       
+          //camera.position.y = planetData[i].position.y + 5;
       
       }
     }
