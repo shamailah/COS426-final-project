@@ -318,7 +318,7 @@ var uranusData = {
 var neptuneData = {
   mass: 1.08 * Math.pow(10, 27),
   position: new THREE.Vector3(500, 0, 0),
-  distance: 430,
+  distance: 350,
   velocity: new THREE.Vector3(990000.0, 0.0, 9999000.0),
   planet: neptune,
   increment: 0.0000001 * 0.02384
@@ -355,7 +355,7 @@ mars.position.y = 5;
 jupiter.position.x = 295;
 saturn.position.x = 375;
 uranus.position.x = 430;
-neptune.position.x = 500;
+neptune.position.x = 480;
 neptune.position.y = 0;
 
 for (let i = 0; i < system.length; i++)
