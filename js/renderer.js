@@ -42,11 +42,12 @@ function onDocumentMouseDown(event) {
     selection = intersects[0].object;
     //console.log("hello")
 
+    pause = false;
+    sceneObject.pause = false;
+    pauseController.setValue(pause);
     if (planetFollow !== selection)
     {
       planetFollow = selection;
-      pause = false;
-      sceneObject.pause = false;
     }
     else
     {
