@@ -102,7 +102,7 @@ function addTrail(planet) {
     var trail = new THREE.TrailRenderer( scene, false );
 
     // create material for the trail renderer
-    var trailMaterial = THREE.TrailRenderer.createBaseMaterial(); 
+    var trailMaterial = THREE.TrailRenderer.createBaseMaterial();
     trailMaterial.uniforms.headColor.value.set(1,1,1,1);
     trailMaterial.uniforms.tailColor.value.set(1,1,1,1);
 
@@ -176,7 +176,7 @@ let sun = createSun("textures/sunSurfaceMaterial.jpg", 4);
 let mercury = createPlanet("textures/mercury.jpg", 2);
 let venus = createPlanet("textures/venus_surface.jpg", 2);
 let earth = createPlanet("textures/earth.jpg", 2, undefined, "textures/earthspecmap.jpg", "textures/earthnormalmap.jpeg");
-let clouds = createClouds("/textures/clouds_2.jpg", 2.05);
+let clouds = createClouds("textures/clouds_2.jpg", 2.05);
 let moon = createPlanet("textures/moon_texture.jpg", 0.5);
 let mars = createPlanet("textures/mars.jpg", 2);
 let jupiter = createPlanet("textures/jupiter.jpg", 2);
