@@ -161,7 +161,6 @@ function addTrail(planet) {
 }
 
 function activateTrails() {
-  debugger;
   for (var i = 0; i < trails.length; i++) {
     trails[i].activate();
   }
